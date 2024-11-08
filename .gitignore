@@ -1,0 +1,63 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+
+# Jupyter
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
+
+# Airflow
+logs/
+airflow.db
+airflow.cfg
+webserver_config.py
+*.pid
+
+# Environment
+.env
+.venv
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ML Models and Data
+*.h5
+*.pth
+*.pkl
+*.joblib
+data/raw_data/*
+data/processed/*
+models/ml/*
+models/scalers/*
+
+# AWS
+*CREDS*.txt
+*.pem
+*.key
+
+# Astro
+.astro/
+
+# Logs
+*.log
+logs/
