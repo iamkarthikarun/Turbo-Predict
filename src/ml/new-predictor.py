@@ -14,12 +14,11 @@ from lstm_model import LSTMRegressor
 import json
 from dotenv import load_dotenv
 
-load_dotenv()  # Load environment variables from .env file
+load_dotenv()  
 
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 region_name ="us-east-2"
-# Initialize AWS clients
 session = boto3.Session(aws_access_key_id=AWS_ACCESS_KEY_ID,
                         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
                         region_name=region_name)
@@ -27,7 +26,6 @@ s3_client = session.client('s3')
 
 
 def preprocess_dataframe(df):
-    # Remove engine_class and unit_nr columns for preprocessing
     processed_df = df.drop(columns=['unit_nr'])
     return processed_df
 
@@ -52,17 +50,13 @@ def make_prediction(model_path, input_file_path):
     print(model)
     df = pd.read_csv(input_file_path)
 
-    # Get unique unit numbers
     unit_numbers = df['unit_nr'].unique()
 
-    # Initialize a dictionary to store predictions for each unit
     predictions = {}
 
     for unit_nr in unit_numbers:
-        # Filter dataframe for the current unit number
         unit_df = df[df['unit_nr'] == unit_nr]
 
-        # Preprocess data without engine_class and unit_nr columns
         unit_df_processed = preprocess_dataframe(unit_df)
         print(unit_df_processed.columns)
 
@@ -80,7 +74,6 @@ def make_prediction(model_path, input_file_path):
         else:
             raise ValueError("Unsupported model type.")
 
-        # Store prediction for the current unit
         predictions[unit_nr] = prediction[-1]
 
     return predictions
@@ -96,12 +89,10 @@ def update_rul_s3(engine_class, predictions):
         if e.response['Error']['Code'] == 'NoSuchKey':
             rul_data = {}
 
-    # Update RUL data for each unit
     for unit_nr, prediction in predictions.items():
-        unit_nr_int = int(float(unit_nr))  # Convert string key to int
+        unit_nr_int = int(float(unit_nr))
         rul_data[str(unit_nr_int)] = int(prediction)
 
-    # Save updated RUL data to S3
     s3_client.put_object(Bucket='bda-nus', Key=path_to_ruls + file_name, Body=json.dumps(rul_data))
 
 

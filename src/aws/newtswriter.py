@@ -9,7 +9,7 @@ from datetime import datetime
 from botocore.exceptions import ClientError
 from dotenv import load_dotenv
 
-load_dotenv()  # Load environment variables from .env file
+load_dotenv() 
 
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
@@ -30,10 +30,8 @@ def save_timestamp_to_storage(timestamp):
     try:
         file_name = 'last_timestamp.txt'
         path_to_ts = "Timestamp/"
-        # Write the timestamp to the file
         with open(file_name, 'w') as file:
             json.dump(timestamp, file)
-        # Upload the file to S3
         with open(file_name, 'rb') as data:
             s3_client.put_object(Bucket='bda-nus', Key=path_to_ts + file_name, Body=data)
         print("Timestamp written to file and uploaded to S3 successfully.")
@@ -152,7 +150,6 @@ def write_to_AWS_TS():
     try:
         for msg in consumer:
             try:
-                # Check if message is a dictionary
                 if isinstance(msg.value, dict):
                     message_dict = msg.value
                 else:
@@ -167,7 +164,7 @@ def write_to_AWS_TS():
                 save_timestamp_to_storage(last_timestamp)  # Save for future consumption
 
             except json.JSONDecodeError:
-                print(f"Error: Message is not valid JSON. Skipping message.")
+                print("Error: Message is not valid JSON. Skipping message.")
             except Exception as e:
                 print(f"Error processing message: {e}")
         if records:
