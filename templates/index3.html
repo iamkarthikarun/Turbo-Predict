@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engine RUL Visualization</title>
+  <style>
+
+body {
+    background-color: #E6E6FA; /* Lavender color */
+  }
+  .flex-container {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+
+  }
+  
+  .flex-container > div {
+    margin: 10px;
+    padding: 20px;
+    font-size: 30px;
+  }
+  #content {
+  font-size: 24px;
+  }
+  #sensorReadingsRight {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Ensure the container takes up the full height */
+  font-family: Arial, sans-serif;
+}
+
+#sensorReadingsRight h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+#sensorReadingsRight h3 {
+  font-size: 16px;
+  font-weight: normal;
+  margin-bottom: 5px;
+}
+
+
+#sensorReadingsLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Ensure the container takes up the full height */
+  font-family: Arial, sans-serif;
+}
+
+#sensorReadingsLeft h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+#sensorReadingsLeft h3 {
+  font-size: 16px;
+  font-weight: normal;
+  margin-bottom: 5px;
+}
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+  <div class="flex-container">
+    <div id="sensorReadingsLeft">
+      <h4>Sensor Readings</h4>
+      <h3>Nc</h3>
+      <h3>Nf</h3>
+      <h3>P15</h3>
+      <h3>P30</h3>
+      <h3>T2</h3>
+      <h3>T24</h3>
+      <h3>T30</h3>
+      <h3>T50</h3>
+      <h3>setting_1</h3>
+      <h3>setting_2</h3>
+      <h3>setting_3</h3>
+    </div>
+  
+    <div id="content">
+      <h1>Engine RUL Visualization</h1>
+      <center>
+      <div id="imageContainer">
+        <img id="engineImage" src="https://e7.pngegg.com/pngimages/267/551/png-clipart-airplane-aircraft-engine-jet-engine-engine-spiral-transport-thumbnail.png " alt="Engine Image" >
+      </div>
+    </center>
+      <form id="engineForm">
+        <center>
+        <label for="engine_class">Enter Engine Class:</label>
+        <input type="text" id="engine_class" name="engine_class">
+        <label for="engine_number">Enter Engine Number:</label>
+        <input type="text" id="engine_number" name="engine_number">
+        <button type="submit">Submit</button>
+      </center>
+      </form>  
+      <div id="engineInfo"></div>
+    </div>
+
+  <div id="sensorReadingsRight">
+    <h4>Sensor Readings</h4>
+    <h3>BPR</h3>
+    <h3>NRc</h3>
+    <h3>NRf</h3>
+    <h3>Nf_dmd</h3>
+    <h3>PCNfR_dmd</h3>
+    <h3>Ps30</h3>
+    <h3>W31</h3>
+    <h3>W32</h3>
+    <h3>epr</h3>
+    <h3>farB</h3>
+    <h3>htBleed</h3>
+    <h3>phi</h3>
+  </div>
+
+
+    <script>
+        $(document).ready(function() {
+            $('#engineForm').submit(function(event) {
+                event.preventDefault();
+                var engineClass = $('#engine_class').val();
+                var engineNumber = $('#engine_number').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/',
+                    data: { 'engine_class': engineClass, 'engine_number': engineNumber },
+                    success: function(response) {
+                        if (response.success) {
+                            var img = new Image();
+                            img.src = 'data:image/png;base64,' + response.engine_image;
+                            $('#imageContainer').html('');
+                            $('#imageContainer').append(img);
+                            $('#engineInfo').text('Remaining useful life: ' + response.rul_prediction + ' time cycles');
+
+                            // Display sensor readings on left and right
+                            $('#sensorReadingsLeft').html('<h2>Sensor Readings</h2>');
+                            $('#sensorReadingsRight').html('<h2>Sensor Readings</h2>');
+                            for (var sensor in response.sensor_readings_left) {
+                              $('#sensorReadingsLeft').append('<h3>' + sensor + ': ' + response.sensor_readings_left[sensor] + '</h3>');
+                            }
+                            for (var sensor in response.sensor_readings_right) {
+                              $('#sensorReadingsRight').append('<h3>' + sensor + ': ' + response.sensor_readings_right[sensor] + '</h3>');
+                            }
+                        } else {
+                            alert(response.error);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('An error occurred while processing your request.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
