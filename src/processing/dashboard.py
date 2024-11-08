@@ -22,24 +22,32 @@ st.markdown("""
     .stMetric {
         background-color: #2F3742 !important;
         border-radius: 4px !important;
-        padding: 1rem !important;
+        padding: 0.5rem !important;
+        margin: 0.2rem !important;
         box-shadow: none !important;
     }
     div[data-testid="stMetricValue"] {
-        font-size: 28px !important;
+        font-size: 20px !important;
         color: #ffffff !important;
         font-weight: 500 !important;
     }
     div[data-testid="stMetricLabel"] {
-        font-size: 14px !important;
+        font-size: 12px !important;
         color: #B0B0B0 !important;
     }
     div[data-testid="stMetricDelta"] {
         color: #00CA4E !important;
+        font-size: 12px !important;
     }
     .stTextInput > div > div {
         background-color: #2F3742;
         color: white;
+    }
+    [data-testid="stHeader"] {
+        background-color: #1B1B1B;
+    }
+    .stMarkdown {
+        color: #B0B0B0;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -137,25 +145,60 @@ try:
         
         with col2:
             st.subheader("Sensor Readings")
-            sensor_col1, sensor_col2 = st.columns(2)
-            
-            # Left column sensors
-            with sensor_col1:
-                st.metric("Setting 1 (°C)", f"{sensor_data['setting_1']:.2f}")
-                st.metric("Setting 2 (psi)", f"{sensor_data['setting_2']:.2f}")
-                st.metric("Setting 3 (rpm)", f"{sensor_data['setting_3']:.2f}")
-                st.metric("Temperature T2 (°C)", f"{sensor_data['T2']:.2f}")
-                st.metric("Temperature T24 (°C)", f"{sensor_data['T24']:.2f}")
-                st.metric("Temperature T30 (°C)", f"{sensor_data['T30']:.2f}")
-            
-            # Right column sensors
-            with sensor_col2:
-                st.metric("Temperature T50 (°C)", f"{sensor_data['T50']:.2f}")
-                st.metric("Pressure P2 (psi)", f"{sensor_data['P2']:.2f}")
-                st.metric("Pressure P15 (psi)", f"{sensor_data['P15']:.2f}")
-                st.metric("Pressure P30 (psi)", f"{sensor_data['P30']:.2f}")
-                st.metric("Speed Nf (rpm)", f"{sensor_data['Nf']:.2f}")
-                st.metric("Speed Nc (rpm)", f"{sensor_data['Nc']:.2f}")
+            for i in range(5):
+                cols = st.columns(5)
+                for j in range(5):
+                    idx = i * 5 + j
+                    if idx < 24:
+                        with cols[j]:
+                            if idx == 0:
+                                st.metric("Setting 1 (°C)", f"{sensor_data['setting_1']:.2f}")
+                            elif idx == 1:
+                                st.metric("Setting 2 (psi)", f"{sensor_data['setting_2']:.2f}")
+                            elif idx == 2:
+                                st.metric("Setting 3 (rpm)", f"{sensor_data['setting_3']:.2f}")
+                            elif idx == 3:
+                                st.metric("T2 (°C)", f"{sensor_data['T2']:.2f}")
+                            elif idx == 4:
+                                st.metric("T24 (°C)", f"{sensor_data['T24']:.2f}")
+                            elif idx == 5:
+                                st.metric("T30 (°C)", f"{sensor_data['T30']:.2f}")
+                            elif idx == 6:
+                                st.metric("T50 (°C)", f"{sensor_data['T50']:.2f}")
+                            elif idx == 7:
+                                st.metric("P2 (psi)", f"{sensor_data['P2']:.2f}")
+                            elif idx == 8:
+                                st.metric("P15 (psi)", f"{sensor_data['P15']:.2f}")
+                            elif idx == 9:
+                                st.metric("P30 (psi)", f"{sensor_data['P30']:.2f}")
+                            elif idx == 10:
+                                st.metric("Nf (rpm)", f"{sensor_data['Nf']:.2f}")
+                            elif idx == 11:
+                                st.metric("Nc (rpm)", f"{sensor_data['Nc']:.2f}")
+                            elif idx == 12:
+                                st.metric("EPR", f"{sensor_data['epr']:.2f}")
+                            elif idx == 13:
+                                st.metric("Ps30 (psi)", f"{sensor_data['Ps30']:.2f}")
+                            elif idx == 14:
+                                st.metric("φ (deg)", f"{sensor_data['phi']:.2f}")
+                            elif idx == 15:
+                                st.metric("NRf", f"{sensor_data['NRf']:.2f}")
+                            elif idx == 16:
+                                st.metric("NRc", f"{sensor_data['NRc']:.2f}")
+                            elif idx == 17:
+                                st.metric("BPR", f"{sensor_data['BPR']:.2f}")
+                            elif idx == 18:
+                                st.metric("farB", f"{sensor_data['farB']:.3f}")
+                            elif idx == 19:
+                                st.metric("htBleed", f"{sensor_data['htBleed']:.2f}")
+                            elif idx == 20:
+                                st.metric("Nf_dmd", f"{sensor_data['Nf_dmd']:.2f}")
+                            elif idx == 21:
+                                st.metric("PCNfR_dmd", f"{sensor_data['PCNfR_dmd']:.2f}")
+                            elif idx == 22:
+                                st.metric("W31", f"{sensor_data['W31']:.2f}")
+                            elif idx == 23:
+                                st.metric("W32", f"{sensor_data['W32']:.2f}")
 
 except ValueError:
     st.error("Please enter a valid engine number")
