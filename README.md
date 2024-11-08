@@ -127,8 +127,8 @@ The interactive dashboard (as shown in the screenshot) provides real-time monito
 
 ### Dashboard Screenshots
 
-![Dashboard Main View](results/Screenshot 2024-11-08 170019.png)
-![Dashboard Main View](results/Screenshot 2024-11-08 170111.png)
+![Dashboard Main View](https://github.com/iamkarthikarun/Turbo-Predict/blob/master/results/Screenshot%202024-11-08%20170019.png)
+![Dashboard Main View](https://github.com/iamkarthikarun/Turbo-Predict/blob/master/results/Screenshot%202024-11-08%20170111.png)
 *Main dashboard showing real-time engine health monitoring with RUL predictions*
 
 The dashboard effectively displays:
